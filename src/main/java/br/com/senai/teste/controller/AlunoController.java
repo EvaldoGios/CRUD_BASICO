@@ -1,6 +1,8 @@
 package br.com.senai.teste.controller;
 
 import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import br.com.senai.teste.model.Aluno;
 import br.com.senai.teste.service.AlunoService;
@@ -43,14 +46,28 @@ public class AlunoController {
         return ResponseEntity.ok(alunos);
     }
 
-    @GetMapping ("/{id}")
-    public ResponseEntity<Aluno> buscarPorId(
-        @PathVariable Integer id) {
+    @PutMapping ("/{id}")
+    public ResponseEntity<Aluno> atualizar(
+        @PathVariable Integer id,
+        @RequestBody Aluno novosDados) {
 
-        Optional<Aluno> aluno = alunoService.buscarPorId(id);
+        Optional<Aluno> aluno = alunoService.atualizar(id, novosDados);
 
         if (aluno.isPresent()) {
             return ResponseEntity.ok(aluno.get());
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping ("/{id}")
+    public ResponseEntity<Void> deletar(
+        @PathVariable Integer id) {
+
+        boolean deletado = alunoService.deletar(id);
+
+        if (deletado) {
+            return ResponseEntity.noContent().build();
         }
 
         return ResponseEntity.notFound().build();
