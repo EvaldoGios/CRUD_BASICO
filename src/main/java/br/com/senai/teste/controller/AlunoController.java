@@ -46,12 +46,11 @@ public class AlunoController {
         return ResponseEntity.ok(alunos);
     }
 
-    @PutMapping ("/{id}")
-    public ResponseEntity<Aluno> atualizar(
-        @PathVariable Integer id,
-        @RequestBody Aluno novosDados) {
+    @GetMapping ("/{id}")
+    public ResponseEntity<Aluno> buscarPorId(
+        @PathVariable Integer id) {
 
-        Optional<Aluno> aluno = alunoService.atualizar(id, novosDados);
+        Optional<Aluno> aluno = alunoService.buscarPorId(id);
 
         if (aluno.isPresent()) {
             return ResponseEntity.ok(aluno.get());
