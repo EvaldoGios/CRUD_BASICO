@@ -15,6 +15,8 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import br.com.senai.teste.model.Livro;
 import br.com.senai.teste.service.LivroService;
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PathVariable;
 
 
@@ -30,7 +32,7 @@ public class LivroController {
 
     @PostMapping
     public ResponseEntity<Livro> cadastrar(
-        @RequestBody Livro livro) {
+       @Valid @RequestBody Livro livro) {
 
         Livro livroCadastrado = livroService.cadastrar(livro);
 
@@ -63,7 +65,7 @@ public class LivroController {
     @PutMapping ("/{id}")
     public ResponseEntity<Livro> atualizar(
         @PathVariable Integer id,
-        @RequestBody Livro novosDados) {
+        @Valid @RequestBody Livro novosDados) {
 
         Optional<Livro> livroAtualizado = livroService.atualizar(id, novosDados);
 

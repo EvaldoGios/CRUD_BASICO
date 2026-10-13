@@ -3,8 +3,10 @@ package br.com.senai.teste.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.validation.constraints.Min;
 
 @Entity 
 @Table (name = "livro")
@@ -14,14 +16,19 @@ public class Livro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotBlank (message = "O título do livro é obrigatório")
     private String titulo;
+
+    @NotBlank (message = "O autor do livro é obrigatório")
     private String autor;
-    private String anoPublicacao;
+
+    @Min(value = 1, message = "O ano de publicação deve ser um número positivo")
+    private int anoPublicacao;
 
     public Livro() {
     }
 
-    public Livro(String titulo, String autor, String anoPublicacao) {
+    public Livro(String titulo, String autor, int anoPublicacao) {
         this.titulo = titulo;
         this.autor = autor;
         this.anoPublicacao = anoPublicacao;
@@ -47,11 +54,11 @@ public class Livro {
         this.autor = autor;
     }
 
-    public String getAnoPublicacao() {
+    public int getAnoPublicacao() {
         return anoPublicacao;
     }
 
-    public void setAnoPublicacao(String anoPublicacao) {
+    public void setAnoPublicacao(int anoPublicacao) {
         this.anoPublicacao = anoPublicacao;
     }
 

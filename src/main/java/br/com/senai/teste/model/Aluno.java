@@ -3,6 +3,8 @@ package br.com.senai.teste.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
@@ -14,7 +16,11 @@ public class Aluno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotBlank (message = "O nome do aluno é obrigatório")
     private String nome;
+
+    @NotBlank (message = "O email é obrigatório")
+    @Email (message = "O email deve ser válido")
     private String email;
 
     public Aluno() {
