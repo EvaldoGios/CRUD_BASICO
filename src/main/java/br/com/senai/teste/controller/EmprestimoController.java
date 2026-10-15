@@ -3,6 +3,7 @@ package br.com.senai.teste.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,5 +64,24 @@ public class EmprestimoController {
             }
 
             return ResponseEntity.ok(emprestimo.get());
+    }
+
+    @PatchMapping ("/{id}/devolucao")
+    public ResponseEntity<Emprestimo> devolver(
+        @PathVariable Integer id) {
+
+            Optional<Emprestimo> emprestimo = emprestimoService.devolver(id);
+
+            if (emprestimo.isPresent()) {
+                return ResponseEntity.ok(emprestimo.get());
+            }
+
+            return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping ("/ativos")
+    public ResponseEntity<List<Emprestimo>> listarEmprestimosAtivos() {
+        List<Emprestimo> emprestimosAtivos = emprestimoService.listarEmprestimosAtivos();
+        return ResponseEntity.ok(emprestimosAtivos);
     }
 }

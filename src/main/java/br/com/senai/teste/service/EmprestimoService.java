@@ -49,4 +49,25 @@ public class EmprestimoService {
     public Optional<Emprestimo> buscarPorId(Integer id) {
         return emprestimoRepository.findById(id);
     }
+
+    public Optional<Emprestimo> devolver(Integer id) {
+        Optional<Emprestimo> encontrato = emprestimoRepository.findById(id);
+
+        if (encontrato.isEmpty()) {
+            return Optional.empty();
+        }  
+
+        Emprestimo emprestimo = encontrato.get();
+
+        if (emprestimo.getDataDevolucao() == null) {
+            emprestimo.setDataDevolucao(LocalDate.now());
+            emprestimoRepository.save(emprestimo);
+        }
+
+        return Optional.of(emprestimo);
+    }
+
+    public List<Emprestimo> listarEmprestimosAtivos() {
+        return emprestimoRepository.findByDataDevolucaoIsNull();
+    }
 }
