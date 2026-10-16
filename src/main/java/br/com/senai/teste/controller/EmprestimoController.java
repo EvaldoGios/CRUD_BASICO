@@ -14,6 +14,7 @@ import br.com.senai.teste.service.EmprestimoService;
 import java.util.Optional;
 import java.util.List;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.time.LocalDate;
 
 
 @RestController 
@@ -33,17 +34,27 @@ public class EmprestimoController {
             Integer alunoId = dados.getAlunoId();
             Integer livroId = dados.getLivroId();
 
-            if (alunoId == null || livroId == null) {
+            LocalDate dataDevolucaoPrevista = dados.getDataDevolucaoPrevista();
+
+            if (alunoId == null
+                 || livroId == null
+                 || dataDevolucaoPrevista == null) {
+
                 return ResponseEntity.badRequest().build();
             }
 
-            Optional<Emprestimo> emprestimo = emprestimoService.cadastrar(alunoId, livroId);
+            Optional<Emprestimo> emprestimo = emprestimoService.cadastrar(
+                alunoId, 
+                livroId, 
+                dataDevolucaoPrevista);
 
             if (emprestimo.isEmpty()) {
                 return ResponseEntity.notFound().build();
             }
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(emprestimo.get());
+            return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(emprestimo.get());
 
     }
 

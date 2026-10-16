@@ -27,7 +27,9 @@ public class EmprestimoService {
     }
 
     public Optional<Emprestimo> cadastrar(
-        Integer alunoId, Integer livroId) {
+        Integer alunoId, 
+        Integer livroId, 
+        LocalDate dataDevolucaoPrevista) {
     
         Optional<Aluno> aluno = alunoRepository.findById(alunoId);
         Optional<Livro> livro = livroRepository.findById(livroId);
@@ -36,10 +38,11 @@ public class EmprestimoService {
             return Optional.empty();
         }
 
-        boolean emprestimoAtivo = emprestimoRepository
-        .existsByAlunoIdAndLivroIdAndDataDevolucaoIsNull(alunoId,livroId);
+        boolean livroEstaEmprestado = emprestimoRepository
+        .existsByAlunoIdAndLivroIdAndDataDevolucaoIsNull(alunoId, livroId);
 
-        if (emprestimoAtivo) {
+
+        if (livroEstaEmprestado) {
             throw new ResponseStatusException(
                 HttpStatus.CONFLICT,
                 "O Livro já está emprestado para este aluno e ainda não foi devolvido.");
@@ -49,6 +52,7 @@ public class EmprestimoService {
         emprestimo.setAluno(aluno.get());
         emprestimo.setLivro(livro.get());
         emprestimo.setDataEmprestimo(LocalDate.now());
+        emprestimo.setDataDevolucaoPrevista(dataDevolucaoPrevista);
 
         return Optional.of(emprestimoRepository.save(emprestimo));
     }
