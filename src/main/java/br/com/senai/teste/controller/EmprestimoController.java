@@ -84,4 +84,18 @@ public class EmprestimoController {
         List<Emprestimo> emprestimosAtivos = emprestimoService.listarEmprestimosAtivos();
         return ResponseEntity.ok(emprestimosAtivos);
     }
+
+    @GetMapping ("/aluno/{alunoId}")
+    public ResponseEntity<List<Emprestimo>> listarEmprestimosPorAluno(
+        @PathVariable Integer alunoId) {
+            List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorAluno(alunoId);
+            return ResponseEntity.ok(emprestimos);
+    }
+
+    @GetMapping ("/livro/{livroId}")
+    public ResponseEntity<List<Emprestimo>> listarEmprestimosPorLivro(
+        @PathVariable Integer livroId) {
+            List<Emprestimo> emprestimos = emprestimoService.listarEmprestimosPorLivro(livroId);
+            return ResponseEntity.ok(emprestimos);
+    }
 }

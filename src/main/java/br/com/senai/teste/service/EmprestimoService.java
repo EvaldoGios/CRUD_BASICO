@@ -1,5 +1,6 @@
 package br.com.senai.teste.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import br.com.senai.teste.model.Aluno;
 import br.com.senai.teste.model.Emprestimo;
@@ -10,6 +11,7 @@ import br.com.senai.teste.repository.LivroRepository;
 import java.time.LocalDate;
 import java.util.Optional; 
 import java.util.List;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service 
 public class EmprestimoService {      
@@ -32,6 +34,15 @@ public class EmprestimoService {
 
         if (aluno.isEmpty() || livro.isEmpty()) {
             return Optional.empty();
+        }
+
+        boolean emprestimoAtivo = emprestimoRepository
+        .existsByAlunoIdAndLivroIdAndDataDevolucaoIsNull(alunoId,livroId);
+
+        if (emprestimoAtivo) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "O Livro já está emprestado para este aluno e ainda não foi devolvido.");
         }
 
         Emprestimo emprestimo = new Emprestimo();
@@ -70,4 +81,13 @@ public class EmprestimoService {
     public List<Emprestimo> listarEmprestimosAtivos() {
         return emprestimoRepository.findByDataDevolucaoIsNull();
     }
+
+    public List<Emprestimo> listarEmprestimosPorAluno(Integer alunoId) {
+        return emprestimoRepository.findByAlunoId(alunoId);
+    }
+
+    public List<Emprestimo> listarEmprestimosPorLivro(Integer livroId) {
+        return emprestimoRepository.findByLivroId(livroId);
+    }
+
 }
