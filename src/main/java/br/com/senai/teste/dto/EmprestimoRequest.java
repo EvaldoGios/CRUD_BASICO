@@ -2,10 +2,19 @@ package br.com.senai.teste.dto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
+
 public class EmprestimoRequest {
     
+    @NotNull (message = "O ID do aluno é obrigatório.")
     private Integer alunoId;
+
+    @NotNull (message = "O ID do livro é obrigatório.")
     private Integer livroId;
+
+    @NotNull (message = "A data de devolução prevista é obrigatória.")
+    @Future (message = "A data de devolução prevista deve ser uma data futura.")
     private LocalDate dataDevolucaoPrevista;
 
     public EmprestimoRequest() {
