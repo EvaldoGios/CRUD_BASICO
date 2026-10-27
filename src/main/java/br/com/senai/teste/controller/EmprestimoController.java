@@ -12,6 +12,7 @@ import br.com.senai.teste.dto.EmprestimoRequest;
 import br.com.senai.teste.model.Emprestimo;
 import br.com.senai.teste.service.EmprestimoService;
 import jakarta.validation.Valid;
+import br.com.senai.teste.dto.RenovacaoRequest;
 
 import java.util.Optional;
 import java.util.List;
@@ -116,6 +117,30 @@ public class EmprestimoController {
     public ResponseEntity<List<Emprestimo>> listarEmprestimosAtrasados() {
         List<Emprestimo> emprestimosAtrasados = emprestimoService.listarEmprestimosAtrasados();
         return ResponseEntity.ok(emprestimosAtrasados);
+    }
+
+    
+    @GetMapping("/aluno/{id}/atrasados")
+    public List<Emprestimo> buscarAtrasadosPorAluno(
+            @PathVariable Integer id) {
+
+        return emprestimoService.buscarAtrasadosPorAluno(id);
+    }
+
+    @PatchMapping("/{id}/renovacao")
+    public ResponseEntity<Emprestimo> renovarEmprestimo(
+        @PathVariable Integer id,
+        @Valid @RequestBody RenovacaoRequest dados) {
+
+            Optional<Emprestimo> emprestimo = emprestimoService.renovarEmprestimo(
+                id, 
+                dados.getDataDevolucaoPrevista());
+
+            if (emprestimo.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(emprestimo.get());
     }
 
 }

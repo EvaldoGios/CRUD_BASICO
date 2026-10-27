@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table (name = "emprestimo")
@@ -27,7 +28,7 @@ public class Emprestimo {
     @JoinColumn(name = "livro_id", nullable = false)
     private Livro livro;
 
-    private LocalDate dataDevolucao;
+    private LocalDate dataDevolucao;    
 
     private LocalDate dataDevolucaoPrevista;
 
@@ -76,6 +77,37 @@ public class Emprestimo {
 
     public void setDataDevolucaoPrevista(LocalDate dataDevolucaoPrevista) {
         this.dataDevolucaoPrevista = dataDevolucaoPrevista;
+    }
+
+    public String getSituacao() {
+
+        if (dataDevolucao != null) {
+            return "Devolvido";
+        }
+        
+       if (dataDevolucaoPrevista == null) {
+        return "Sem prevista de devolução";
+       }
+
+       if (dataDevolucaoPrevista.isBefore(LocalDate.now())) {
+        return "Atrasado";
+       }
+
+       return "ATIVO";
+    }
+
+    public long getDiasAtraso() {
+
+        if (dataDevolucao != null 
+        || dataDevolucaoPrevista == null 
+        || !dataDevolucaoPrevista.isBefore(LocalDate.now())) {
+
+            return 0;
+        }
+
+        return ChronoUnit.DAYS.between(
+            dataDevolucaoPrevista, 
+            LocalDate.now());
     }
     
 }
